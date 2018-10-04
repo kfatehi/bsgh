@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { debounce } from 'debounce';
+import * as Chart from "chart.js";
 import './App.css';
 
 const READY = 0;
@@ -42,7 +43,18 @@ class RepoIssues extends Component {
     const open = total - closed;
     if (issues) {
       return <div>
-        open: { open } closed: { closed } total: { total }
+        <PieChart data={[
+          {
+            label: "Open",
+            value: open,
+            color: 'red',
+          },
+          { 
+            label: "Closed",
+            value: closed,
+            color: 'green',
+          }
+        ]} />
         <button onClick={()=>onClickFilter('')}>All</button>
         <button onClick={()=>onClickFilter('open')}>Open</button>
         <button onClick={()=>onClickFilter('closed')}>Closed</button>
@@ -53,6 +65,16 @@ class RepoIssues extends Component {
     } else {
       return null
     }
+  }
+}
+
+class PieChart extends Component {
+  render() {
+    return <div><canvas ref={(canvas)=>{
+      if (canvas) {
+        new Chart(canvas.getContext('2d')).Pie(this.props.data)
+      }
+    }}/></div>
   }
 }
 
