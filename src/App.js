@@ -3,13 +3,6 @@ import { debounce } from 'debounce';
 import * as Chart from "chart.js";
 import './App.css';
 
-const READY = 0;
-const LOADING = 1;
-const ERROR = 1;
-
-const REPO_SEARCH = 0;
-const REPO_DETAIL = 1;
-const REPO_ISSUES = 2;
 
 class RepoListItem extends Component {
   render() {
@@ -82,27 +75,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      query: '',
-      mode: REPO_SEARCH,
-      repos: [],
-      repo: null,
-      repoPath: '',
-      loadState: READY
     }
-    this.executeQueryNow = ()=>{
-      this.setState({ loadState: LOADING });
-      let q = this.state.query.split(':')[0];
-      this.setState({ mode: REPO_SEARCH, repos: [], repo: null });
-      fetch(`https://api.github.com/search/repositories?q=${q}`)
-        .then((resp) => resp.json())
-        .then((data)=>{
-          this.setState({ loadState: READY, repos: data.items });
-        })
-        .catch((err)=>{
-          this.setState({ loadState: ERROR, errorDetail: err.stack });
-        })
-    }
-    this.executeQuery = debounce(this.executeQueryNow, 500)
   }
   queryChanged(e) {
     let query = e.target.value;
@@ -154,7 +127,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <input type="text" style={{margin:'50px', width: '300px'}} placeholder="Search repositories..." value={this.state.query} onChange={(e)=>this.queryChanged(e)} />
         { this.renderBody() }
       </div>
     );
