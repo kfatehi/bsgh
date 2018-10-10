@@ -1,13 +1,16 @@
-import {REPO_SEARCH, LOADING, READY, ERROR} from '../constants';
+import {REPO_SEARCH, REPO_DETAIL, REPO_ISSUES, LOADING, READY, ERROR} from '../constants';
 
 const initialState = {
-  query: '',
+  loadState: READY,
+  errorDetail: null,
   mode: REPO_SEARCH,
+  query: '',
   repos: [],
   repo: null,
   repoPath: '',
-  loadState: READY,
-  errorDetail: null,
+  issues: [],
+  totalIssues: null,
+  closedIssues: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -51,6 +54,27 @@ const reducer = (state = initialState, action) => {
         ...state,
         repos: action.repos
       }
+
+    case 'SET_REPO': {
+      let repoPath = `${action.repo.owner.login}/${action.repo.name}`;
+      return {
+        ...state,
+        repoPath,
+        mode: REPO_DETAIL,
+        query: repoPath,
+        repo: action.repo
+      }
+    }
+
+    case 'SET_ISSUE_LIST': {
+      return {
+        ...state,
+        mode: REPO_ISSUES,
+        issues: action.issues.items,
+        totalIssues: action.issues.total_count,
+        closedIssues: action.issues.total_count - state.repo.open_issues_count
+      }
+    }
     default:
       return state
   }

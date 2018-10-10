@@ -8,6 +8,7 @@ import { createStore, applyMiddleware } from 'redux';
 import reducer from './reducers';
 
 import Search from './containers/Search'
+import Results from './containers/Results'
 
 import thunk from 'redux-thunk';
 
@@ -21,7 +22,10 @@ const store = createStore(
 // * refactor current design to unidirectional flow with redux
 render(
   <Provider store={store}>
-    <Search />
+    <div className="App">
+      <Search />
+      <Results />
+    </div>
   </Provider>,
   document.getElementById('root')
 );

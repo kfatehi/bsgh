@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { executeQuery } from '../actions';
 
 const Search = ({ value, handleChange }) => {
-  return <input type="text" placeholder="Search repositories..." value={value} onChange={e=>handleChange(e)} />
+  return <input className="Search" type="text" placeholder="Search repositories..." value={value} onChange={e=>handleChange(e)} />
 }
 
 const mapStateToProps = (state, ownProps) => ({
